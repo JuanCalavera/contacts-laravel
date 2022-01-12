@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [ContactsController::class, 'index']);
+Route::get('/', [ContactsController::class, 'index'])->name('home');
+Route::post('/', [ContactsController::class, 'update']);
+Route::delete('/{id}', [ContactsController::class, 'destroy']);
 Route::get('/adicionar-contato', function () {
     return view('form');
-});
-Route::post('/adicionar-contato', [ContactsController::class, 'store']);
+})->name('form-create');
+Route::post('/adicionar-contato', [ContactsController::class, 'store'])->name('create-contact');

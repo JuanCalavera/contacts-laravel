@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ContactFormRequest;
 use App\Models\Contact;
 
 use Illuminate\Http\Request;
@@ -9,11 +10,14 @@ use Illuminate\Http\Request;
 class ContactsController extends Controller
 {
     function index(){
-     $contacts = Contact::all();
+     $contacts = Contact::orderBy('favorite', 'desc')->get();
 
      return view('index', compact('contacts'));
     }
-    function store(Request $request){
+
+    function store(ContactFormRequest $request){
+
+
             $post['name'] = $request->name;
             $post['subname'] = $request->subname;
             $post['phone1'] = $request->phone1;
@@ -28,10 +32,25 @@ class ContactsController extends Controller
                 'favorite' => $post['favorite']
             ]);
 
-            return redirect('/');
+            session()->flash(
+                'message',
+                "{$post['name']} {$post['subname']} adicionado(a) com sucesso!!!"
+            );
+
+            return redirect()->route('home');
 
     }
-    function update(){}
-    function show(){}
-    function destroy(){}
+    function update(Request $request){}
+    function show(Request $request){}
+    function destroy(Request $request){
+        $contact = Contact::find($request->id)->name;
+        Contact::destroy($request->id);
+        session()->flash(
+            'destroy',
+            "{$contact} foi removido(a)"
+        );
+
+        return redirect()->route('home');
+    }
+
 }
