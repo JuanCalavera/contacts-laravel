@@ -27,9 +27,12 @@
                     {{ $contact->favorite != 0 ? 'Sim' : 'Não' }}</ul>
             </div>
             <div>
-                <button class="btn btn-lg btn-primary text-white mb-3"> <i class="fas fa-edit    "></i> Editar</button>
-                <form action="/{{$contact->id}}" method="post" onsubmit="return confirm('Deseja mesmo excluir este contato')">
-                    <button type="submit" class="btn btn-lg btn-danger text-white mb-3"> <i class="fa fa-trash" aria-hidden="true"></i> Deletar</button>
+                <form action="/{{ $contact->id }}" method="post"
+                    onsubmit="return confirm('Deseja mesmo excluir este contato')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-lg btn-danger text-white mb-3"> <i class="fa fa-trash"
+                            aria-hidden="true"></i> Deletar</button>
                 </form>
                 <a href="{{ route('home') }}" class="btn btn-lg btn-info text-white mb-3"> <i class="fa fa-undo"
                         aria-hidden="true"></i> Voltar</a>

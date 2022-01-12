@@ -53,7 +53,7 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                            <h5 class="modal-title" id="exampleModalLabel">Editar Contato</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
@@ -110,18 +110,4 @@
             </div>
         @endforeach
     </div>
-@endsection
-
-@section('scripts')
-    <script>
-        function toogleModal(e) {
-            var modal = document.getElementById(e);
-
-            if (modal.style.display == 'none') {
-                modal.style.display = 'block';
-            } else {
-                modal.style.display = 'none';
-            }
-        }
-    </script>
 @endsection
