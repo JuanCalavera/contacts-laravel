@@ -7,8 +7,8 @@
 @section('body')
     <div class="container py-5">
         <div class="d-flex justify-content-between align-items-center">
-            <h1>Todos os contatos</h1>
-            <a href="{{route('form-create')}}" class="btn btn-primary">Adicionar Contato</a>
+            <h1> <i class="fa fa-users" aria-hidden="true"></i> Todos os contatos</h1>
+            <a href="{{ route('form-create') }}" class="btn btn-primary"> <i class="fa fa-plus" aria-hidden="true"></i> Adicionar Contato</a>
         </div>
 
         @if (session()->has('message'))
@@ -23,30 +23,32 @@
         @endif
 
         @foreach ($contacts as $item)
-            <div class="card my-2">
+            <div class="card bg-secondary my-2 text-white">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <ul class="list-group">
-                                <li class="list-group-item">Nome: {{ $item->name }}</li>
-                                <li class="list-group-item">Sobrenome: {{ $item->last_name }}</li>
-                                <li class="list-group-item">Telefone: {{ $item->phone }}</li>
-                                <li class="list-group-item">Descrição: {{ $item->description }}</li>
-                                <li class="list-group-item">Favorito: {{ $item->favorite != 0 ? 'Sim' : 'Não' }}</li>
-                            </ul>
+                            <a href="/contato/{{$item->slug}}" class="text-white" style="text-decoration: none">
+                                <h2 class="h4"> <i class="fa fa-user text-info" aria-hidden="true"></i> {{ $item->name }}</h2>
+                                <ul>Sobrenome: {{ $item->last_name }}</ul>
+                                <ul> <i class="fa fa-envelope text-info" aria-hidden="true"></i> Email: {{ $item->email }}</ul>
+                                <ul> <i class="fa fa-phone text-info" aria-hidden="true"></i> Telefone: {{ $item->phone }}</ul>
+                                <ul> <i class="fa fa-comment text-info" aria-hidden="true"></i> Descrição: {{ substr($item->description, 0, 40) }}</ul>
+                                <ul> <i class="fa fa-star text-warning" aria-hidden="true"></i> Favorito: {{ $item->favorite != 0 ? 'Sim' : 'Não' }}</ul>
+                            </a>
                         </div>
                         <div>
-                            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
-                                data-bs-target="#modal{{ $item->id }}">
+                            <button type="button" class="btn btn-primary text-white mb-3" data-bs-toggle="modal"
+                                data-bs-target="#modal{{ $item->id }}"> <i class="fas fa-edit    "></i>
                                 Editar Contato
                             </button>
-                            <form action="/{{$item->id}}" method="post" onsubmit="return confirm('Deseja remover este contato?')">
+                            <form action="/{{ $item->id }}" method="post"
+                                onsubmit="return confirm('Deseja remover este contato?')">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-danger" name="delete">Deletar Usuário</button>
+                                <button class="btn btn-danger" name="delete"> <i class="fa fa-trash" aria-hidden="true"></i> Deletar Usuário</button>
                             </form>
 
-                            <div class="modal fade" id="modal{{ $item->id }}" tabindex="-1"
+                            <div class="modal fade text-black" id="modal{{ $item->id }}" tabindex="-1"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -58,17 +60,26 @@
                                         <div class="modal-body">
                                             <form action="" method="post">
                                                 @csrf
+                                                @method('PUT')
                                                 <div class="mb-3">
                                                     <label class="form-label">Nome</label>
-                                                    <input class="form-control" type="text" name="name" placeholder="{{$item->name}}">
+                                                    <input class="form-control" type="text" name="name"
+                                                        placeholder="{{ $item->name }}">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Sobrenome</label>
-                                                    <input class="form-control" type="text" name="subname" placeholder="{{$item->last_name}}">
+                                                    <input class="form-control" type="text" name="subname"
+                                                        placeholder="{{ $item->last_name }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Email</label>
+                                                    <input class="form-control" type="email" name="email"
+                                                        placeholder="{{ $item->email }}">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Telefone</label>
-                                                    <input class="form-control" type="text" name="phone1" placeholder="{{$item->phone}}">
+                                                    <input class="form-control" type="text" name="phone1"
+                                                        placeholder="{{ $item->phone }}">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Descrição</label>
@@ -76,17 +87,18 @@
                                                         rows="10"></textarea>
                                                 </div>
                                                 <div class="form-check mb-3">
-                                                    <input class="form-check-input" name="favorite" type="checkbox" {{ $item->favorite != 0 ? 'checked' : '' }}>
+                                                    <input class="form-check-input" name="favorite" type="checkbox"
+                                                        {{ $item->favorite != 0 ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="flexCheckChecked">
                                                         Favorito
                                                     </label>
                                                 </div>
-                                                <button class="btn btn-success" type="submit">Adicionar Contato</button>
+                                                <input type="hidden" name="id" value="{{ $item->id }}">
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                                data-bs-dismiss="modal">Fechar</button>
+                                            <button type="submit" class="btn btn-primary">Editar Contato</button>
                                         </div>
                                         </form>
                                     </div>
@@ -98,4 +110,18 @@
             </div>
         @endforeach
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        function toogleModal(e) {
+            var modal = document.getElementById(e);
+
+            if (modal.style.display == 'none') {
+                modal.style.display = 'block';
+            } else {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
 @endsection

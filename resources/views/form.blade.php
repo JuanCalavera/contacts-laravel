@@ -29,6 +29,10 @@
                 <input class="form-control" type="text" name="subname">
             </div>
             <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input class="form-control" type="email" name="email">
+            </div>
+            <div class="mb-3">
                 <label class="form-label">Telefone</label>
                 <input class="form-control" type="text" name="phone1">
             </div>
