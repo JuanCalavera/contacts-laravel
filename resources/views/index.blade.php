@@ -8,7 +8,8 @@
     <div class="container py-5">
         <div class="d-flex justify-content-between align-items-center">
             <h1> <i class="fa fa-users" aria-hidden="true"></i> Todos os contatos</h1>
-            <a href="{{ route('form-create') }}" class="btn btn-primary"> <i class="fa fa-plus" aria-hidden="true"></i> Adicionar Contato</a>
+            <a href="{{ route('form-create') }}" class="btn btn-primary"> <i class="fa fa-plus" aria-hidden="true"></i>
+                Adicionar Contato</a>
         </div>
 
         @if (session()->has('message'))
@@ -27,13 +28,30 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <a href="/contato/{{$item->slug}}" class="text-white" style="text-decoration: none">
-                                <h2 class="h4"> <i class="fa fa-user text-info" aria-hidden="true"></i> {{ $item->name }}</h2>
+                            <a href="/contato/{{ $item->slug }}" class="text-white" style="text-decoration: none">
+                                <h2 class="h4"> <i class="fa fa-user text-info" aria-hidden="true"></i>
+                                    {{ $item->name }}</h2>
                                 <ul>Sobrenome: {{ $item->last_name }}</ul>
-                                <ul> <i class="fa fa-envelope text-info" aria-hidden="true"></i> Email: {{ $item->email }}</ul>
-                                <ul> <i class="fa fa-phone text-info" aria-hidden="true"></i> Telefone: {{ $item->phone }}</ul>
-                                <ul> <i class="fa fa-comment text-info" aria-hidden="true"></i> Descrição: {{ substr($item->description, 0, 40) }}</ul>
-                                <ul> <i class="fa fa-star text-warning" aria-hidden="true"></i> Favorito: {{ $item->favorite != 0 ? 'Sim' : 'Não' }}</ul>
+                                <ul>
+                                    @php
+                                        $emails = explode(';', $item->email);
+                                        $phones = explode(';', $item->phone);
+                                    @endphp
+                                    <p class="h5"><i class="fa fa-envelope text-info" aria-hidden="true"></i> {{ count($emails) <= 1 ? 'Email:' : 'Emails:' }}</p>
+                                    @foreach ($emails as $email)
+                                        <li>{{ $email }}</li>
+                                    @endforeach
+                                </ul>
+
+                                <ul> <p class="h5"><i class="fa fa-phone text-info" aria-hidden="true"></i> {{ $phones <= 1 ? 'Telefone:' : 'Telefones' }}</p>
+                                    @foreach ($phones as $phone)
+                                        <li>{{ $phone }}</li>
+                                    @endforeach
+                                </ul>
+                                <ul> <i class="fa fa-comment text-info" aria-hidden="true"></i> Descrição:
+                                    {{ substr($item->description, 0, 40) }}</ul>
+                                <ul> <i class="fa fa-star text-warning" aria-hidden="true"></i> Favorito:
+                                    {{ $item->favorite != 0 ? 'Sim' : 'Não' }}</ul>
                             </a>
                         </div>
                         <div>
@@ -45,7 +63,8 @@
                                 onsubmit="return confirm('Deseja remover este contato?')">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-danger" name="delete"> <i class="fa fa-trash" aria-hidden="true"></i> Deletar Usuário</button>
+                                <button class="btn btn-danger" name="delete"> <i class="fa fa-trash"
+                                        aria-hidden="true"></i> Deletar Usuário</button>
                             </form>
 
                             <div class="modal fade text-black" id="modal{{ $item->id }}" tabindex="-1"

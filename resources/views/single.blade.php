@@ -1,5 +1,10 @@
 @extends('default')
 
+@php
+$emails = explode(';', $contact->email);
+$phones = explode(';', $contact->phone);
+@endphp
+
 @section('title')
     {{ $contact->name }} {{ $contact->last_name }}
 @endsection
@@ -7,24 +12,40 @@
 @section('body')
     <div class="container my-3">
         <div class="text-center">
-            <i class="fas fa-user-circle fa-5x"></i>
+            @if (!empty($contact->img_profile))
+                <img src="{{ asset('storage/' . $contact->img_profile) }}" alt="profile">
+            @else
+                <i class="fas fa-user-circle fa-5x"></i>
+            @endif
             <h1>{{ $contact->name }} {{ $contact->last_name }}</h1>
         </div>
 
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between align-items-center">
             <div>
-                <ul class="h4"> <i class="fa fa-envelope text-info" aria-hidden="true"></i>
-                    <small>Email:</small><br>
-                    {{ $contact->email }}
-                </ul>
-                <ul class="h4"> <i class="fa fa-phone text-info" aria-hidden="true"></i>
-                    <small>Telefone:</small><br>
-                    {{ $contact->phone }}
-                </ul>
-                <ul class="h4"> <i class="fas fa-comment text-info"></i> <small>Descrição:</small><br>
-                    {{ $contact->description }}</ul>
-                <ul class="h4"><i class="fas fa-star text-warning"></i> <small>Favorito:</small><br>
-                    {{ $contact->favorite != 0 ? 'Sim' : 'Não' }}</ul>
+                <div class="my-3">
+                    <h2 class="h3 mb-3"><i class="fa fa-envelope text-info" aria-hidden="true"></i> Email(s):</h2>
+                    <ul class="h4 list-group">
+                        @foreach ($emails as $email)
+                            <li class="list-group-item list-group-item-dark">{{ $email }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div class="my-3">
+                    <h2 class="h3 mb-3"><i class="fa fa-phone text-info" aria-hidden="true"></i> Telefone(s):</h2>
+                    <ul class="h4 list-group">
+                        @foreach ($phones as $phone)
+                            <li class="list-group-item list-group-item-dark">{{ $phone }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div class="card text-white bg-secondary my-3" style="max-width: 18rem;">
+                    <div class="card-header"><i class="fa fa-comment" aria-hidden="true"></i> Descrição:</div>
+                    <div class="card-body">
+                      <p class="card-text">{{$contact->description ? $contact->description : "Não possui descrição"}}</p>
+                    </div>
+                  </div>
+                <h2 class="h4"><i class="fas fa-star text-warning"></i> Favorito:
+                    {{ $contact->favorite != 0 ? 'Sim' : 'Não' }}</h2>
             </div>
             <div>
                 <form action="/{{ $contact->id }}" method="post"

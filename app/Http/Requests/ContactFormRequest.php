@@ -25,7 +25,6 @@ class ContactFormRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'phone1' => 'required'
         ];
     }
 

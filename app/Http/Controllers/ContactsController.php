@@ -21,8 +21,8 @@ class ContactsController extends Controller
             $post['name'] = $request->name;
             $post['subname'] = $request->subname;
             $post['slug'] = strtolower($request->name . "-" . $request->subname);
-            $post['email'] = $request->email;
-            $post['phone1'] = $request->phone1;
+            $post['email'] = implode(';', $request->email);
+            $post['phone'] = implode(';', $request->phone);
             $post['description'] = $request->description;
             $post['favorite'] = $request->favorite != 0 ? true : false;
 
@@ -31,9 +31,10 @@ class ContactsController extends Controller
                 'last_name' => $post['subname'],
                 'slug' => $post['slug'],
                 'email' => $post['email'],
-                'phone' => $post['phone1'],
+                'phone' => $post['phone'],
                 'description' => $post['description'],
-                'favorite' => $post['favorite']
+                'favorite' => $post['favorite'],
+                'img_profile' => $request->file('img_profile')->store('uploads'),
             ]);
 
             session()->flash(
