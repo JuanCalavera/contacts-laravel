@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('/', [ContactsController::class, 'index'])->name('home');
+Route::put('/{id}', [ContactsController::class, 'update']);
+Route::get('/contato/{slug}', [ContactsController::class, 'show']);
+Route::delete('/{id}', [ContactsController::class, 'destroy']);
+Route::post('/adicionar-contato', [ContactsController::class, 'store'])->name('create-contact');

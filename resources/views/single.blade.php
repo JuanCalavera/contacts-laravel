@@ -13,7 +13,7 @@ $phones = explode(';', $contact->phone);
     <div class="container my-3">
         <div class="text-center">
             @if (!empty($contact->img_profile))
-                <img src="{{ asset('storage/' . $contact->img_profile) }}" alt="profile">
+                <img src="{{ url('/storage/app/uploads' . $contact->img_profile) }}" alt="profile">
             @else
                 <i class="fas fa-user-circle fa-5x"></i>
             @endif

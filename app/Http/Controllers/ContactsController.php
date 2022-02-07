@@ -9,24 +9,28 @@ use Illuminate\Http\Request;
 
 class ContactsController extends Controller
 {
-    function index(){
-     $contacts = Contact::orderBy('favorite', 'desc')->get();
+    function index()
+    {
+        $contacts = Contact::orderBy('favorite', 'desc')->get();
 
-     return view('index', compact('contacts'));
+        return $contacts;
     }
 
-    function store(ContactFormRequest $request){
+    function store(ContactFormRequest $request)
+    {
 
-
+        if (!isset($request)) {
+            $return = 'danger';
+        } else {
             $post['name'] = $request->name;
             $post['subname'] = $request->subname;
             $post['slug'] = strtolower($request->name . "-" . $request->subname);
-            $post['email'] = implode(';', $request->email);
-            $post['phone'] = implode(';', $request->phone);
+            $post['email'] = is_array($request->email) ? implode(';', $request->email) : $request->email;
+            $post['phone'] = is_array($request->phone) ? implode(';', $request->phone) : $request->phone;
             $post['description'] = $request->description;
             $post['favorite'] = $request->favorite != 0 ? true : false;
 
-            Contact::create([
+            $return = Contact::create([
                 'name' => $post['name'],
                 'last_name' => $post['subname'],
                 'slug' => $post['slug'],
@@ -34,19 +38,15 @@ class ContactsController extends Controller
                 'phone' => $post['phone'],
                 'description' => $post['description'],
                 'favorite' => $post['favorite'],
-                'img_profile' => $request->file('img_profile')->store('uploads'),
             ]);
+        }
 
-            session()->flash(
-                'message',
-                "{$post['name']} {$post['subname']} adicionado(a) com sucesso!!!"
-            );
-
-            return redirect()->route('home');
-
+        return $return;
     }
 
-    function update(Request $request){
+    function update(Request $request)
+    {
+
         $contact = Contact::find($request->id);
 
         $contact->name = !empty($request->name) ? $request->name : $contact->name;
@@ -58,21 +58,18 @@ class ContactsController extends Controller
         $contact->favorite = $request->favorite != 0 ? true : false;
         $contact->save();
 
-        session()->flash(
-            'edited',
-            "{$contact} foi editado(a) com sucesso"
-        );
-
-        return redirect()->route('home');
+        return $contact;
     }
 
-    function show(Request $request){
+    function show(Request $request)
+    {
         $contact = Contact::query()->where('slug', $request->slug)->get()[0];
 
-        return view('single', compact('contact'));
+        return view('single', ['contact' => $contact]);
     }
 
-    function destroy(Request $request){
+    function destroy(Request $request)
+    {
         $contact = Contact::find($request->id)->name;
         Contact::destroy($request->id);
         session()->flash(
@@ -82,5 +79,4 @@ class ContactsController extends Controller
 
         return redirect()->route('home');
     }
-
 }
