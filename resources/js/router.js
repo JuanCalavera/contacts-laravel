@@ -4,7 +4,8 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 const routes = [
-    {path: '/', component: require('./components/pages/Contacts.vue').default},
+    {name: 'home', path: '/', component: require('./components/pages/Contacts.vue').default},
+    {name: 'single', path: '/single-contact', component: require('./components/pages/SingleContact.vue').default},
 ];
 
 export default new VueRouter({
